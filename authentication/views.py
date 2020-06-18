@@ -1,4 +1,4 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
 from django.db import transaction
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -8,7 +8,7 @@ from authentication.serializers import (
     RegisterRequestSerializer,
     LoginRequestSerializer,
 )
-from authentication.utils import register_user
+from authentication.utils import register_user, authenticate
 from wallet.utils import create_wallet
 
 
@@ -38,7 +38,7 @@ class LoginAPIView(APIView):
         request_serializer = LoginRequestSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
 
-        user = authenticate(request, **request_serializer.data)
+        user = authenticate(**request_serializer.data)
         if not user:
             raise PermissionDenied
 

@@ -12,3 +12,13 @@ def register_user(email, password):
         password=make_password(password),
     )
     return user
+
+
+def authenticate(email, password):
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return None
+    else:
+        if user.check_password(password):
+            return user
