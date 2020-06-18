@@ -42,7 +42,7 @@ def transfer_money(from_wallet, to_wallet, amount):
     Transfer.objects.create(
         transaction=t,
         wallet=from_wallet,
-        amount= - amount,
+        amount=-amount,
     )
     Transfer.objects.create(
         transaction=t,
@@ -57,12 +57,13 @@ def transfer_money(from_wallet, to_wallet, amount):
 
 
 def get_operations(wallet):
-    return Transfer.objects.filter(
+    data = Transfer.objects.filter(
         wallet=wallet
     ).values_list(
         'transaction__created_at',
         'amount',
     )
+    return list(map(lambda x: [str(x[0]), str(x[1])], data))
 
 
 def request_rates_from_exchangeratesapi(asset):
