@@ -1,6 +1,8 @@
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from decimal import Decimal
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -117,3 +119,5 @@ STATIC_URL = '/static/'
 
 BALANCE_DECIMAL_PLACES = os.getenv('BALANCE_DECIMAL_PLACES', 6)
 BALANCE_MAX_DIGITS = os.getenv('BALANCE_MAX_DIGITS', 16)
+
+MULTIPLICITY = Decimal(os.getenv('MULTIPLICITY', 1))
