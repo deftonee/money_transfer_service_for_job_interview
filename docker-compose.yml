@@ -21,3 +21,5 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
+  refresh_rates_job:
+    build: ./refresh_rates_job
