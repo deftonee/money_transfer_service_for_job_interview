@@ -16,9 +16,13 @@ class AssetTypeEnum(Enum):
     def choices(cls):
         return tuple((i.name, i.value) for i in cls)
 
+    @classmethod
+    def assets(cls):
+        return tuple(i.value for i in cls)
+
 
 class Wallet(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
 
     asset = models.CharField(choices=AssetTypeEnum.choices(), max_length=5)
     balance = models.DecimalField(
@@ -33,17 +37,20 @@ class Transaction(models.Model):
 
 class Transfer(models.Model):
     transaction = models.ForeignKey(to=Transaction, on_delete=models.CASCADE)
-    from_wallet = models.ForeignKey(
-        to=Wallet,
-        on_delete=models.CASCADE,
-        related_name='transfer_from',
-    )
-    to_wallet = models.ForeignKey(
-        to=Wallet,
-        on_delete=models.CASCADE,
-        related_name='transfer_to',
-    )
+    wallet = models.ForeignKey(to=Wallet, on_delete=models.CASCADE)
     amount = models.DecimalField(
         decimal_places=settings.BALANCE_DECIMAL_PLACES,
         max_digits=settings.BALANCE_MAX_DIGITS,
     )
+
+
+class Rate(models.Model):
+    asset = models.CharField(choices=AssetTypeEnum.choices(), max_length=5)
+    quote = models.CharField(choices=AssetTypeEnum.choices(), max_length=5)
+    rate = models.DecimalField(
+        decimal_places=settings.BALANCE_DECIMAL_PLACES,
+        max_digits=settings.BALANCE_MAX_DIGITS,
+    )
+
+    class Meta:
+        unique_together = ('asset', 'quote')
